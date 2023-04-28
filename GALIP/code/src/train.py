@@ -31,21 +31,21 @@ from lib.datasets import get_fix_data
 def parse_args():
     # Training settings
     parser = argparse.ArgumentParser(description='Text2Img')
-    parser.add_argument('--cfg', dest='cfg_file', type=str, default='../cfg/coco.yml',
+    parser.add_argument('--cfg', dest='cfg_file', type=str, default='cfg/fonts.yml',
                         help='optional config file')
     parser.add_argument('--num_workers', type=int, default=4,
                         help='number of workers(default: {0})'.format(mp.cpu_count() - 1))
     parser.add_argument('--stamp', type=str, default='normal',
                         help='the stamp of model')
-    parser.add_argument('--pretrained_model_path', type=str, default='model',
+    parser.add_argument('--pretrained_model_path', type=str, default='models',
                         help='the model for training')
     parser.add_argument('--log_dir', type=str, default='new',
                         help='file path to log directory')
     parser.add_argument('--model', type=str, default='GALIP',
                         help='the model for training')
-    parser.add_argument('--state_epoch', type=int, default=100,
+    parser.add_argument('--state_epoch', type=int, default=1,
                         help='state epoch')
-    parser.add_argument('--batch_size', type=int, default=1024,
+    parser.add_argument('--batch_size', type=int, default=8,
                         help='batch size')
     parser.add_argument('--train', type=str, default='True',
                         help='if train model')
@@ -53,7 +53,7 @@ def parse_args():
                         help='if use multi-gpu')
     parser.add_argument('--multi_gpus', type=str, default='False',
                         help='if use multi-gpu')
-    parser.add_argument('--gpu_id', type=int, default=1,
+    parser.add_argument('--gpu_id', type=int, default=0,
                         help='gpu id')
     parser.add_argument('--local_rank', default=-1, type=int,
                         help='node rank for distributed training')

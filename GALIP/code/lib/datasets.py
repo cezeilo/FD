@@ -166,7 +166,7 @@ class TextImgDataset(data.Dataset):
                 img_name = '%s/images/%s.jpg' % (data_dir, key)
                 text_name = '%s/text/%s.txt' % (data_dir, key.split('_')[0])
         else:
-            img_name = '%s/CUB_200_2011/images/%s.jpg' % (data_dir, key)
+            img_name = '%s/images/%s.jpg' % (data_dir, key)
             text_name = '%s/text/%s.txt' % (data_dir, key)
         #
         imgs = get_imgs(img_name, bbox, self.transform, normalize=self.norm)

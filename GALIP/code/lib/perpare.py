@@ -14,7 +14,8 @@ import clip
 import importlib
 from lib.utils import choose_model
 
-
+#TODO: Change this line to load CLIP model trained on fonts
+#Actually...only need to change YML file to ensure that 'type' field points to the CLIP model
 ###########   preparation   ############
 def load_clip(clip_info, device):
     import clip as clip

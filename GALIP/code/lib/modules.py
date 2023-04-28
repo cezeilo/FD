@@ -238,7 +238,9 @@ def calculate_FID_CLIP_sim(dataloader, text_encoder, netG, CLIP, device, m1, s1,
         transforms.Normalize((-1, -1, -1), (2, 2, 2)),
         transforms.Resize((299, 299)),
         ])
-    n_gpu = dist.get_world_size()
+    #n_gpu = dist.get_world_size()
+    n_gpu = 1
+
     dl_length = dataloader.__len__()
     imgs_num = dl_length * n_gpu * batch_size * times
     pred_arr = np.empty((imgs_num, dims))
@@ -273,9 +275,10 @@ def calculate_FID_CLIP_sim(dataloader, text_encoder, netG, CLIP, device, m1, s1,
                     pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
                 # concat pred from multi GPUs
                 output = list(torch.empty_like(pred) for _ in range(n_gpu))
-                dist.all_gather(output, pred)
-                pred_all = torch.cat(output, dim=0).squeeze(-1).squeeze(-1)
-                pred_arr[start:end] = pred_all.cpu().data.numpy()
+                #dist.all_gather(output, pred)
+                #pred_all = torch.cat(output, dim=0).squeeze(-1).squeeze(-1)
+                #pred_arr[start:end] = pred_all.cpu().data.numpy()
+                pred_arr[start:end] = pred.squeeze(-1).squeeze(-1).cpu().data.numpy()
             # update loop information
             if (n_gpu!=1) and (get_rank() != 0):
                 None
@@ -291,9 +294,10 @@ def calculate_FID_CLIP_sim(dataloader, text_encoder, netG, CLIP, device, m1, s1,
     else:
         loop.close()
     # CLIP-score
-    CLIP_score_gather = list(torch.empty_like(clip_cos) for _ in range(n_gpu))
-    dist.all_gather(CLIP_score_gather, clip_cos)
-    clip_score = torch.cat(CLIP_score_gather, dim=0).mean().item()/(dl_length*times)
+    CLIP_score_gather = list(torch.empty_like(clip_cos) for _ in range(n_gpu))[0]
+    #dist.all_gather(CLIP_score_gather, clip_cos)
+    #clip_score = torch.cat(CLIP_score_gather, dim=0).mean().item()/(dl_length*times)
+    clip_score = CLIP_score_gather.mean().item()/(dl_length*times)
     # FID
     m2 = np.mean(pred_arr, axis=0)
     s2 = np.cov(pred_arr, rowvar=False)
