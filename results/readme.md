@@ -1,4 +1,5 @@
 # Text-To-Image Font Generation Results using GALIP 
+## Sample results
 
 <p align="center">
 <b>Generated Images
